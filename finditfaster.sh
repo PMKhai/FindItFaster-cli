@@ -56,7 +56,7 @@ fp() {
     return 1
   fi
 
-  local result=$(find . -type f -name "*$1*" | fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}')
+  local result=$(find . -type f -name "*$1*" | fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'  --height 80% --layout=reverse)
 
   if [ -n "$result" ]; then
     # Open file in default editor
