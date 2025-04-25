@@ -29,7 +29,7 @@ fs() {
         --preview-window "right,60%,border-left,+{2}+3/3,~3" \
         --height 80% --layout=reverse \
         --bind "change:reload(if [ -n '{q}' ]; then rg --color=always --line-number --no-heading --smart-case {q}; else echo -n; fi || true)" \
-        --prompt "Search content> " \
+        --prompt "> " \
         --header "Type to search content within files. Press Enter on a line to open." \
         --query "$*" # Start with arguments as query, or empty if no args
   )
