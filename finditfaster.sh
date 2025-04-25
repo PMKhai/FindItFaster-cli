@@ -26,7 +26,7 @@ fs() {
         --color "hl:-1:underline,hl+:-1:underline:reverse" \
         --delimiter : \
         --preview "bat --color=always {1} --highlight-line {2} --style=numbers" \
-        --preview-window "right,60%,border-left,+{2}+3/3,~3" \
+        --preview-window "right,50%,border-left,+{2}+3/3,~3" \
         --height 80% --layout=reverse \
         --bind "change:reload(if [ -n '{q}' ]; then rg --color=always --line-number --no-heading --smart-case {q}; else echo -n; fi || true)" \
         --prompt "> " \
