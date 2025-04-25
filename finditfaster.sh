@@ -49,14 +49,53 @@ fs() {
   # If result is empty or not in expected format, do nothing.
 }
 
-# Find file by name with pattern (fp = find pattern)
+# Find file by name with pattern(s) (fp = find pattern)
+# Usage: fp "<pattern1>,<pattern2>,..." (e.g., fp "*.ts,*.js")
 fp() {
   if [ $# -eq 0 ]; then
-    echo "Usage: fp <pattern>"
+    echo "Usage: fp \"<pattern1>,<pattern2>,...\""
+    echo "Example: fp \"*.ts,*.js\""
     return 1
   fi
 
-  local result=$(find . -type f -name "*$1*" | fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'  --height 80% --layout=reverse)
+  local patterns_input="$1"
+  local find_args=()
+  local first=true
+  local patterns=() # Initialize patterns array
+
+  # Zsh specific splitting by comma
+  patterns=("${(@s/,/)patterns_input}")
+
+  # Start building the find command arguments
+  find_args+=(".") # Search in current directory
+  find_args+=("-type" "f") # Only find files
+
+  # Add name patterns with -o (OR)
+  find_args+=("(") # Start grouping patterns
+  for pattern_raw in "${patterns[@]}"; do
+    # Trim leading/trailing whitespace from pattern
+    pattern=$(echo "$pattern_raw" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    if [ -n "$pattern" ]; then # Ensure pattern is not empty
+      if [ "$first" = true ]; then
+        first=false
+      else
+        find_args+=("-o") # Add OR operator before subsequent patterns
+      fi
+      find_args+=("-name" "$pattern") # Add the name pattern
+    fi
+  done
+  find_args+=(")") # End grouping patterns
+
+  # Check if any patterns were actually added
+  if [ "$first" = true ]; then
+    echo "Error: No valid patterns found in input '$patterns_input'."
+    return 1
+  fi
+
+  # Execute find and pipe to fzf
+  # Redirect stderr to avoid showing find errors like "permission denied"
+  local result
+  result=$(find "${find_args[@]}" 2>/dev/null | fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}' --height 80% --layout=reverse)
 
   if [ -n "$result" ]; then
     # Open file in default editor
@@ -85,5 +124,3 @@ finditfaster_help() {
   echo "fd  - Find and change to directory"
   echo "finditfaster_help - Display this help message"
 }
-
-echo "FindItFaster loaded. Type 'finditfaster_help' to see usage instructions."
