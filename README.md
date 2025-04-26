@@ -60,7 +60,7 @@ source ~/.zshrc
   - Enter to open the file at the line with the result
 
 - `fp <pattern>`: Find file by pattern
-  - Example: `fp "*.tsx"`
+  - Example: `fp "*.tsx,..."`
   - Displays all files matching the pattern
   - Enter to open the selected file
 
@@ -76,7 +76,6 @@ source ~/.zshrc
 - `Enter`: Select the current item
 - `Esc` / `Ctrl+C`: Exit
 - `Ctrl+R`: Rotate display mode (for some commands)
-- `?`: Show help
 
 ## Customization
 

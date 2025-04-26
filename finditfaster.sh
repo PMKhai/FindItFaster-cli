@@ -5,7 +5,7 @@
 
 # Find file by name (ff = find files)
 ff() {
-  local result=$(fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}' --height 80% --layout=reverse)
+  local result=$(fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}')
   if [ -n "$result" ]; then
     # Open file in default editor (code or vim)
     if command -v code >/dev/null 2>&1; then
@@ -27,7 +27,6 @@ fs() {
         --delimiter : \
         --preview "bat --color=always {1} --highlight-line {2} --style=numbers" \
         --preview-window "right,50%,border-left,+{2}+3/3,~3" \
-        --height 80% --layout=reverse \
         --bind "change:reload(if [ -n '{q}' ]; then rg --color=always --line-number --no-heading --smart-case {q}; else echo -n; fi || true)" \
         --prompt "> " \
         --header "Type to search content within files. Press Enter on a line to open." \
@@ -95,7 +94,7 @@ fp() {
   # Execute find and pipe to fzf
   # Redirect stderr to avoid showing find errors like "permission denied"
   local result
-  result=$(find "${find_args[@]}" 2>/dev/null | fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}' --height 80% --layout=reverse)
+  result=$(find "${find_args[@]}" 2>/dev/null | fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}')
 
   if [ -n "$result" ]; then
     # Open file in default editor
